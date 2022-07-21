@@ -7,5 +7,5 @@ Enemy::Enemy()
 }
 
 int Enemy::GetDamage() {
-	return 7;
+	return 4 + rand() % 4;
 }

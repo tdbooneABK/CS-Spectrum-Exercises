@@ -2,6 +2,10 @@
 #include "PlayerInfoDialog.h"
 #include "Player.h"
 
+/*
+	Rather than returning a Player object, this should either accept an empty Player and populate the values,
+	or it should use "new" return a _pointer_ to a player object.
+*/
 Player PlayerInfoDialog::GetPlayerInfo() {
 	std::string inputName = "";
 	int inputWeapon = 0;
@@ -23,7 +27,7 @@ std::string PlayerInfoDialog::GetPlayerName() {
 }
 
 int PlayerInfoDialog::GetWeapon() {
-	std::cout << "Please select your weapon:" << std::endl;
+	std::cout << std::endl << "Please select your weapon:" << std::endl;
 	std::cout << "1) Sword" << std::endl;
 	std::cout << "2) Axe" << std::endl;
 	std::cout << "3) Bow" << std::endl;
@@ -47,7 +51,7 @@ int PlayerInfoDialog::GetWeapon() {
 }
 
 int PlayerInfoDialog::GetArmorClass() {
-	std::cout << "Please select your armor class:" << std::endl;
+	std::cout << std::endl << "Please select your armor class:" << std::endl;
 	std::cout << "1) Light" << std::endl;
 	std::cout << "2) Medium" << std::endl;
 	std::cout << "3) Heavy" << std::endl;
@@ -71,6 +75,7 @@ int PlayerInfoDialog::GetArmorClass() {
 }
 
 void PlayerInfoDialog::PrintPlayerInfo(Player player) {
+	system("cls");
 	std::cout << "Player Info:" << std::endl;
 	std::cout << "Name: " << player.GetName() << std::endl;
 	std::cout << "Health: " << player.GetHealth() << std::endl;
@@ -102,4 +107,7 @@ void PlayerInfoDialog::PrintPlayerInfo(Player player) {
 		break;
 	}
 	std::cout << "Armor: " << armorDisplayName << " Armor" << std::endl;
+	std::cout << std::endl << "Press enter to continue..." << std::endl;
+	std::cin.ignore();
+	std::cin.get();
 }

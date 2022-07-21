@@ -8,6 +8,7 @@ class Encounter
 	Enemy m_enemy;
 	void Round();
 	void DisplayHealth();
+	void PressAnyKeyToContinue();
 public:
 	Encounter(Player &player, Enemy &enemy);
 	bool Run();

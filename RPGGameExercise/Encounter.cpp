@@ -12,6 +12,8 @@ Encounter::Encounter(Player& player, Enemy& enemy)
 */
 bool Encounter::Run() {
 	std::cout << m_player.GetName() << " encounters a wild " << m_enemy.GetName() << " with " << m_enemy.GetHealth() << " health!" << std::endl;
+	DisplayHealth();
+	PressAnyKeyToContinue();
 	do {
 		Round();
 	} while (m_player.GetHealth() > 0 && m_enemy.GetHealth() > 0);
@@ -24,21 +26,27 @@ bool Encounter::Run() {
 }
 
 void Encounter::Round() {
-	std::cout << std::endl;
-	DisplayHealth();
+	system("cls");
 	int playerDamage = m_player.GetDamage();
 	std::cout << m_player.GetName() << " attacks for " << playerDamage << " damage!" << std::endl;
 	m_enemy.DoDamage(playerDamage);
 	if (m_enemy.GetHealth() > 0) {
 		int enemyDamage = m_enemy.GetDamage();
-		std::cout << m_enemy.GetName() << " attacks back for " << enemyDamage << " kdamage!" << std::endl;
+		std::cout << m_enemy.GetName() << " attacks back for " << enemyDamage << " damage!" << std::endl;
 		m_player.DoDamage(enemyDamage);
 	}
 	else {
 		std::cout << m_enemy.GetName() << " has been defeated!" << std::endl;
 	}
+	DisplayHealth();
+	PressAnyKeyToContinue();
 }
 
 void Encounter::DisplayHealth() {
 	std::cout << m_player.GetName() << ": " << m_player.GetHealth() << "   " << m_enemy.GetName() << ": " << m_enemy.GetHealth() << std::endl;
+}
+
+void Encounter::PressAnyKeyToContinue() {
+	std::cout << std::endl << "Press enter to continue..." << std::endl;
+	std::cin.get();
 }

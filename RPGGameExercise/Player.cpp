@@ -8,5 +8,5 @@ Player::Player(std::string name, int weapon, int armorClass)
 }
 
 int Player::GetDamage() {
-	return 10;
+	return 5 + rand() % 6;
 }

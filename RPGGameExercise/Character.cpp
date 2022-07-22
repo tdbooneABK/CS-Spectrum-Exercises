@@ -1,10 +1,11 @@
 #include <string>
 #include "Character.h"
+#include "Weapon.h"
 
-Character::Character(std::string name, int weapon, int armorClass)
+Character::Character(std::string name, WeaponType weaponType, int armorClass)
 	: m_Name(name),
 	m_Health(100),
-	m_Weapon(weapon),
+	m_Weapon(Weapon(weaponType)),
 	m_ArmorClass(armorClass)
 {
 }
@@ -17,7 +18,7 @@ int Character::GetHealth() {
 	return m_Health;
 };
 
-int Character::GetWeapon() {
+Weapon Character::GetWeapon() {
 	return m_Weapon;
 };
 

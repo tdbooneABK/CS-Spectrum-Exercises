@@ -1,11 +1,13 @@
 #include <string>
 #include "Enemy.h"
+#include "Weapon.h"
 
 Enemy::Enemy()
-	: Character("Enemy", rand() % 4, rand() % 4)
+	: Character("Enemy", (WeaponType)(rand() % 4), rand() % 4)
 {
 }
 
 int Enemy::GetDamage() {
-	return 4 + rand() % 4;
+	int damage = GetWeapon().GetWeaponDamage();
+	return damage >= 1 ? damage - 1 : 0;
 }

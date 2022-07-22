@@ -1,6 +1,7 @@
 #include <iostream>
 #include "PlayerInfoDialog.h"
 #include "Player.h"
+#include "Weapon.h"
 
 /*
 	Rather than returning a Player object, this should either accept an empty Player and populate the values,
@@ -14,7 +15,7 @@ Player PlayerInfoDialog::GetPlayerInfo() {
 	inputName = GetPlayerName();
 	inputWeapon = GetWeapon();
 	inputArmorClass = GetArmorClass();
-	Player newPlayer = Player(inputName, inputWeapon, inputArmorClass);
+	Player newPlayer = Player(inputName, (WeaponType)inputWeapon, inputArmorClass);
 	PrintPlayerInfo(newPlayer);
 	return newPlayer;
 }
@@ -28,9 +29,9 @@ std::string PlayerInfoDialog::GetPlayerName() {
 
 int PlayerInfoDialog::GetWeapon() {
 	std::cout << std::endl << "Please select your weapon:" << std::endl;
-	std::cout << "1) Sword" << std::endl;
-	std::cout << "2) Axe" << std::endl;
-	std::cout << "3) Bow" << std::endl;
+	for (int i = 1; i <= Weapon::maxWeaponType; i++) {
+		std::cout << i << ") " << Weapon::GetWeaponName((WeaponType)i) << std::endl;
+	}
 
 	int inputWeapon = 0;
 
@@ -41,7 +42,7 @@ int PlayerInfoDialog::GetWeapon() {
 			std::cin.clear();
 			std::cin.ignore(100, '\n');
 		}
-		else if (inputWeapon > 0 && inputWeapon <= 3) {
+		else if (inputWeapon > 0 && inputWeapon <= Weapon::maxWeaponType) {
 			return inputWeapon;
 		}
 		else {
@@ -79,20 +80,7 @@ void PlayerInfoDialog::PrintPlayerInfo(Player player) {
 	std::cout << "Player Info:" << std::endl;
 	std::cout << "Name: " << player.GetName() << std::endl;
 	std::cout << "Health: " << player.GetHealth() << std::endl;
-
-	std::string weaponDisplayName = "";
-	switch (player.GetWeapon()) {
-		case 1:
-			weaponDisplayName = "Sword";
-			break;
-		case 2:
-			weaponDisplayName = "Axe";
-			break;
-		case 3:
-			weaponDisplayName = "Bow";
-			break;
-	}
-	std::cout << "Weapon: " << weaponDisplayName << std::endl;
+	std::cout << "Weapon: " << player.GetWeapon().GetWeaponName() << std::endl;
 
 	std::string armorDisplayName = "";
 	switch (player.GetArmorClass()) {

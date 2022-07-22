@@ -1,18 +1,19 @@
 #pragma once
 #include <string>
+#include "Weapon.h"
 
 class Character
 {
 	std::string m_Name;
 	int m_Health;
-	int m_Weapon;
+	Weapon m_Weapon;
 	int m_ArmorClass;
 
 public:
-	Character(std::string name, int weapon, int armorClass);
+	Character(std::string name, WeaponType weapon, int armorClass);
 	std::string GetName();
 	int GetHealth();
-	int GetWeapon();
+	Weapon GetWeapon();
 	int GetArmorClass();
 	virtual int GetDamage() = 0;
 	void DoDamage(int damage);

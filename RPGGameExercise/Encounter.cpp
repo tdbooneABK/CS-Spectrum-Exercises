@@ -11,7 +11,9 @@ Encounter::Encounter(Player& player, Enemy& enemy)
 	If player succeeds return true; if player is defeated return false
 */
 bool Encounter::Run() {
-	std::cout << m_player.GetName() << " encounters a wild " << m_enemy.GetName() << " with " << m_enemy.GetHealth() << " health!" << std::endl;
+	std::cout << m_player.GetName() << " encounters a wild " << m_enemy.GetName()
+		<< " wielding a " << m_enemy.GetWeapon().GetWeaponName() << " with " << m_enemy.GetHealth()
+		<< " health!" << std::endl;
 	DisplayHealth();
 	PressAnyKeyToContinue();
 	do {

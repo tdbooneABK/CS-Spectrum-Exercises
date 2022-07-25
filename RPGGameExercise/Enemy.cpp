@@ -1,9 +1,10 @@
 #include <string>
 #include "Enemy.h"
 #include "Weapon.h"
+#include "Armor.h"
 
 Enemy::Enemy()
-	: Character("Enemy", (WeaponType)(rand() % 4), rand() % 4)
+	: Character("Enemy", (WeaponType)(rand() % 4), (ArmorClass)(rand() % 4))
 {
 }
 

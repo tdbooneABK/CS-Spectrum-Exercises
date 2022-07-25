@@ -2,6 +2,7 @@
 #include "PlayerInfoDialog.h"
 #include "Player.h"
 #include "Weapon.h"
+#include "Armor.h"
 
 /*
 	Rather than returning a Player object, this should either accept an empty Player and populate the values,
@@ -15,7 +16,7 @@ Player PlayerInfoDialog::GetPlayerInfo() {
 	inputName = GetPlayerName();
 	inputWeapon = GetWeapon();
 	inputArmorClass = GetArmorClass();
-	Player newPlayer = Player(inputName, (WeaponType)inputWeapon, inputArmorClass);
+	Player newPlayer = Player(inputName, (WeaponType)inputWeapon, (ArmorClass)inputArmorClass);
 	PrintPlayerInfo(newPlayer);
 	return newPlayer;
 }
@@ -46,16 +47,17 @@ int PlayerInfoDialog::GetWeapon() {
 			return inputWeapon;
 		}
 		else {
-			std::cout << "Invalid weapon! Please enter a number between 1 and 3." << std::endl;
+			std::cout << "Invalid weapon! Please enter a number between 1 and ";
+			std::cout << Weapon::maxWeaponType << "." << std::endl;
 		}
 	} while (true);
 }
 
 int PlayerInfoDialog::GetArmorClass() {
 	std::cout << std::endl << "Please select your armor class:" << std::endl;
-	std::cout << "1) Light" << std::endl;
-	std::cout << "2) Medium" << std::endl;
-	std::cout << "3) Heavy" << std::endl;
+	for (int i = 1; i <= Armor::maxArmorClass; i++) {
+		std::cout << i << ") " << Armor::GetArmorName((ArmorClass)i) << std::endl;
+	}
 
 	int inputArmorClass = 0;
 
@@ -66,11 +68,12 @@ int PlayerInfoDialog::GetArmorClass() {
 			std::cin.clear();
 			std::cin.ignore(100, '\n');
 		}
-		else if (inputArmorClass > 0 && inputArmorClass <= 3) {
+		else if (inputArmorClass > 0 && inputArmorClass <= Armor::maxArmorClass) {
 			return inputArmorClass;
 		}
 		else {
-			std::cout << "Invalid armor class! Please enter a number between 1 and 3." << std::endl;
+			std::cout << "Invalid armor class! Please enter a number between 1 and ";
+			std::cout << Armor::maxArmorClass << "." << std::endl;
 		}
 	} while (true);
 }
@@ -81,20 +84,7 @@ void PlayerInfoDialog::PrintPlayerInfo(Player player) {
 	std::cout << "Name: " << player.GetName() << std::endl;
 	std::cout << "Health: " << player.GetHealth() << std::endl;
 	std::cout << "Weapon: " << player.GetWeapon().GetWeaponName() << std::endl;
-
-	std::string armorDisplayName = "";
-	switch (player.GetArmorClass()) {
-	case 1:
-		armorDisplayName = "Light";
-		break;
-	case 2:
-		armorDisplayName = "Medium";
-		break;
-	case 3:
-		armorDisplayName = "Heavy";
-		break;
-	}
-	std::cout << "Armor: " << armorDisplayName << " Armor" << std::endl;
+	std::cout << "Armor: " << player.GetArmor().GetArmorName() << std::endl;
 	std::cout << std::endl << "Press enter to continue..." << std::endl;
 	std::cin.ignore();
 	std::cin.get();

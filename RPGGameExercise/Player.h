@@ -6,6 +6,6 @@
 class Player : public Character
 {
 public:
-	Player(std::string name, WeaponType weapon, int armorClass);
+	Player(std::string name, WeaponType weapon, ArmorClass armorClass);
 	int GetDamage() override;
 };

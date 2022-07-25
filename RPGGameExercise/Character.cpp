@@ -1,13 +1,15 @@
 #include <string>
 #include "Character.h"
 #include "Weapon.h"
+#include "Armor.h"
 
-Character::Character(std::string name, WeaponType weaponType, int armorClass)
+Character::Character(std::string name, WeaponType weaponType, ArmorClass armorClass)
 	: m_Name(name),
 	m_Health(100),
 	m_Weapon(Weapon(weaponType)),
-	m_ArmorClass(armorClass)
+	m_Armor(Armor(armorClass))
 {
+	m_Health += m_Armor.GetHealthBonus();
 }
 
 std::string Character::GetName() {
@@ -22,13 +24,20 @@ Weapon Character::GetWeapon() {
 	return m_Weapon;
 };
 
-int Character::GetArmorClass() {
-	return m_ArmorClass;
+Armor Character::GetArmor() {
+	return m_Armor;
 };
 
-void Character::DoDamage(int damage) {
-	m_Health -= damage;
-	if (m_Health < 0) {
-		m_Health = 0;
+// If player dodges attack, return false. Otherwise return true
+bool Character::DoDamage(int damage) {
+	if ((rand() % 100 + 1) < m_Armor.GetDodgeChance() * 100) {
+		return false;
+	}
+	else {
+		m_Health -= damage;
+		if (m_Health < 0) {
+			m_Health = 0;
+		}
+		return true;
 	}
 }

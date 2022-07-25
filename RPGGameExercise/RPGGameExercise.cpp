@@ -6,6 +6,7 @@
 
 int main()
 {
+    srand(time(0));
     PlayerInfoDialog infoDialog = PlayerInfoDialog();
     Player player = infoDialog.GetPlayerInfo();
     Enemy enemy = Enemy();

@@ -25,10 +25,13 @@ std::string Weapon::GetWeaponName() {
 int Weapon::GetWeaponDamage() {
 	switch (m_Type) {
 		case Sword:
+			// 5 - 8 damage
 			return 5 + rand() % 4;
 		case Axe:
+			// 3 - 10 damage
 			return 3 + rand() % 8;
 		case Bow:
+			// 60% hit chance for 10 - 13 damage
 			return ((rand() % 100) > 60) * (10 + rand() % 4);
 		default:
 			return 1 + rand() % 4;

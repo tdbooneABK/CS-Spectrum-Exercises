@@ -4,8 +4,17 @@
 #include "Armor.h"
 
 Enemy::Enemy()
-	: Character("Enemy", (WeaponType)(rand() % 4), (ArmorClass)(rand() % 4))
+	: Character(Enemy::GetRandomName(), (WeaponType)(rand() % 4), (ArmorClass)(rand() % 4))
 {
+}
+
+const std::string Enemy::adjectives[] = { "Sweaty", "Hairy", "Smelly", "Snarling", "Drooling" };
+const std::string Enemy::nouns[] = { "Ogre", "Wolf", "Goblin", "Murloc", "Donkey" };
+const int Enemy::adjectivesLength = 5;
+const int Enemy::nounsLength = 5;
+
+std::string Enemy::GetRandomName() {
+	return Enemy::adjectives[rand() % Enemy::adjectivesLength] + " " + Enemy::nouns[rand() % Enemy::nounsLength];
 }
 
 int Enemy::GetDamage() {

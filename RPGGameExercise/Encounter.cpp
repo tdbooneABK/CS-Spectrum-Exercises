@@ -29,7 +29,6 @@ bool Encounter::Run() {
 
 void Encounter::Round() {
 	system("cls");
-	DisplayHealth(); // Show "before" health for debugging purposes
 	int playerDamage = m_player.GetDamage();
 	if (playerDamage > 0) {
 		if (m_enemy.DoDamage(playerDamage)) {

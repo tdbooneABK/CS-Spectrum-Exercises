@@ -9,5 +9,5 @@ class PlayerInfoDialog
 	int GetArmorClass();
 	void PrintPlayerInfo(Player player);
 public:
-	Player GetPlayerInfo();
+	Player* GetPlayerInfo();
 };

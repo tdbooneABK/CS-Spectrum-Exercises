@@ -4,11 +4,7 @@
 #include "Weapon.h"
 #include "Armor.h"
 
-/*
-	Rather than returning a Player object, this should either accept an empty Player and populate the values,
-	or it should use "new" return a _pointer_ to a player object.
-*/
-Player PlayerInfoDialog::GetPlayerInfo() {
+Player* PlayerInfoDialog::GetPlayerInfo() {
 	std::string inputName = "";
 	int inputWeapon = 0;
 	int inputArmorClass = 0;
@@ -16,8 +12,8 @@ Player PlayerInfoDialog::GetPlayerInfo() {
 	inputName = GetPlayerName();
 	inputWeapon = GetWeapon();
 	inputArmorClass = GetArmorClass();
-	Player newPlayer = Player(inputName, (WeaponType)inputWeapon, (ArmorClass)inputArmorClass);
-	PrintPlayerInfo(newPlayer);
+	Player* newPlayer = new Player(inputName, (WeaponType)inputWeapon, (ArmorClass)inputArmorClass);
+	PrintPlayerInfo(*newPlayer);
 	return newPlayer;
 }
 

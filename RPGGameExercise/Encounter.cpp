@@ -20,6 +20,7 @@ bool Encounter::Run() {
 		Round();
 	} while (m_player.GetHealth() > 0 && m_enemy.GetHealth() > 0);
 	if (m_player.GetHealth() <= 0) {
+		std::cout << m_player.GetName() << " has died!" << std::endl;
 		return false;
 	}
 	else {

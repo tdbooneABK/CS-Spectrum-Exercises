@@ -41,3 +41,13 @@ bool Character::DoDamage(int damage) {
 		return true;
 	}
 }
+
+void Character::AddHealth(int healthAmount) {
+	// If character has more than max health, then this could actually decrease their health, and we don't want that.
+	if (m_Health < Character::maxHealth) {
+		m_Health += healthAmount;
+		if (m_Health > Character::maxHealth) {
+			m_Health = Character::maxHealth;
+		}
+	}
+}

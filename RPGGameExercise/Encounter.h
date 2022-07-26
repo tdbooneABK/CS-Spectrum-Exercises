@@ -4,12 +4,12 @@
 
 class Encounter
 {
-	Player m_player;
-	Enemy m_enemy;
+	Player* m_playerPt;
+	Enemy* m_enemyPt;
 	void Round();
 	void DisplayHealth();
 	void PressAnyKeyToContinue();
 public:
-	Encounter(Player &player, Enemy &enemy);
+	Encounter(Player* playerPt, Enemy* enemyPt);
 	bool Run();
 };

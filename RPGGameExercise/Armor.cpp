@@ -9,11 +9,11 @@ Armor::Armor(ArmorClass armorClass)
 std::string Armor::GetArmorName(ArmorClass armorClass) {
 	switch (armorClass)
 	{
-	case Light:
+	case ArmorClass::Light:
 		return "Light Armor";
-	case Medium:
+	case ArmorClass::Medium:
 		return "Medium Armor";
-	case Heavy:
+	case ArmorClass::Heavy:
 		return "Heavy Armor";
 	default:
 		return "Regular Clothes";
@@ -26,11 +26,11 @@ std::string Armor::GetArmorName() {
 
 int Armor::GetHealthBonus() {
 	switch (m_ArmorClass) {
-	case Light:
+	case ArmorClass::Light:
 		return 10;
-	case Medium:
+	case ArmorClass::Medium:
 		return 25;
-	case Heavy:
+	case ArmorClass::Heavy:
 		return 50;
 	default:
 		return 0;
@@ -40,11 +40,11 @@ int Armor::GetHealthBonus() {
 float Armor::GetDodgeChance() {
 	switch (m_ArmorClass)
 	{
-	case Light:
+	case ArmorClass::Light:
 		return 0.2f;
-	case Medium:
+	case ArmorClass::Medium:
 		return 0.1f;
-	case Heavy:
+	case ArmorClass::Heavy:
 	default:
 		return 0.0f;
 	}

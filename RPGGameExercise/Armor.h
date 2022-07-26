@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 
-enum ArmorClass {
+enum class ArmorClass {
 	Light = 1,
 	Medium,
 	Heavy

@@ -7,11 +7,11 @@ Weapon::Weapon(WeaponType weaponType)
 
 std::string Weapon::GetWeaponName(WeaponType type) {
 	switch (type) {
-		case Sword:
+		case WeaponType::Sword:
 			return "Sword";
-		case Axe:
+		case WeaponType::Axe:
 			return "Axe";
-		case Bow:
+		case WeaponType::Bow:
 			return "Bow";
 		default:
 			return "Bare Fist";
@@ -24,13 +24,13 @@ std::string Weapon::GetWeaponName() {
 
 int Weapon::GetWeaponDamage() {
 	switch (m_Type) {
-		case Sword:
+		case WeaponType::Sword:
 			// 5 - 8 damage
 			return 5 + rand() % 4;
-		case Axe:
+		case WeaponType::Axe:
 			// 3 - 10 damage
 			return 3 + rand() % 8;
-		case Bow:
+		case WeaponType::Bow:
 			// 60% hit chance for 10 - 13 damage
 			return ((rand() % 100) > 60) * (10 + rand() % 4);
 		default:

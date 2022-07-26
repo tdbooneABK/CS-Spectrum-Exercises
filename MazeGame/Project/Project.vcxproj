@@ -158,6 +158,7 @@
     <ClCompile Include="GameplayState.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
+    <ClCompile Include="Invincibility.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LoseState.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="HighScoreState.h" />
+    <ClInclude Include="Invincibility.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LoseState.h" />

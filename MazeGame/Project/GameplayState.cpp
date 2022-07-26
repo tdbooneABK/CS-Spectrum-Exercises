@@ -9,6 +9,7 @@
 #include "Key.h"
 #include "Door.h"
 #include "Money.h"
+#include "Invincibility.h"
 #include "Goal.h"
 #include "AudioManager.h"
 #include "Utility.h"
@@ -30,9 +31,10 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
 {
-	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
+	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level3.txt");
+	m_LevelNames.push_back("LevelA.txt");
 }
 
 GameplayState::~GameplayState()
@@ -104,6 +106,7 @@ bool GameplayState::Update(bool processInput)
 			m_player.DropKey();
 		}
 
+		m_player.Update();
 		// If position never changed
 		if (newPlayerX == m_player.GetXPosition() && newPlayerY == m_player.GetYPosition())
 		{
@@ -157,12 +160,14 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			collidedEnemy->Remove();
 			m_player.SetPosition(newPlayerX, newPlayerY);
 
-			m_player.DecrementLives();
-			if (m_player.GetLives() < 0)
-			{
-				//TODO: Go to game over screen
-				AudioManager::GetInstance()->PlayLoseSound();
-				m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
+			if (!m_player.IsInvincible()) {
+				m_player.DecrementLives();
+				if (m_player.GetLives() < 0)
+				{
+					//TODO: Go to game over screen
+					AudioManager::GetInstance()->PlayLoseSound();
+					m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
+				}
 			}
 			break;
 		}
@@ -173,6 +178,15 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 			AudioManager::GetInstance()->PlayMoneySound();
 			collidedMoney->Remove();
 			m_player.AddMoney(collidedMoney->GetWorth());
+			m_player.SetPosition(newPlayerX, newPlayerY);
+			break;
+		}
+		case ActorType::Invincibility:
+		{
+			Invincibility* invincibilityPowerup = dynamic_cast<Invincibility*>(collidedActor);
+			assert(invincibilityPowerup);
+			invincibilityPowerup->Remove();
+			m_player.PickupInvincibililty();
 			m_player.SetPosition(newPlayerX, newPlayerY);
 			break;
 		}

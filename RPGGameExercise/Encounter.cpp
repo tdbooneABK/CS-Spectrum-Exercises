@@ -14,7 +14,6 @@ bool Encounter::Run() {
 	std::cout << m_playerPt->GetName() << " encounters a wild " << m_enemyPt->GetName()
 		<< " wielding a " << m_enemyPt->GetWeapon().GetWeaponName() << " and wearing "
 		<< m_enemyPt->GetArmor().GetArmorName() << "!" << std::endl;
-	std::cout << "Player pointer in Encounter::Run: " << m_playerPt << std::endl;
 	DisplayHealth();
 	PressAnyKeyToContinue();
 	do {

@@ -14,7 +14,6 @@ Player* PlayerInfoDialog::GetPlayerInfo() {
 	inputArmorClass = GetArmorClass();
 	Player* newPlayer = new Player(inputName, (WeaponType)inputWeapon, (ArmorClass)inputArmorClass);
 	PrintPlayerInfo(*newPlayer);
-	std::cout << "Player pointer in PlayerInfoDialog: " << newPlayer << std::endl;
 	return newPlayer;
 }
 

@@ -240,7 +240,6 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 void GameplayState::Draw()
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	system("cls");
 
 	m_pLevel->Draw();
 

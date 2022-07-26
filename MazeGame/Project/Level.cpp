@@ -76,6 +76,10 @@ void Level::Draw()
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(console, (int)ActorColor::Regular);
+	COORD levelDrawStartPosition;
+	levelDrawStartPosition.X = 0;
+	levelDrawStartPosition.Y = 0;
+	SetConsoleCursorPosition(console, levelDrawStartPosition);
 
 	// Draw the Level
 	for (int y = 0; y < GetHeight(); ++y)

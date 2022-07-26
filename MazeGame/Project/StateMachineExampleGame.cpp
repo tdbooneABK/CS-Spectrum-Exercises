@@ -68,6 +68,7 @@ void StateMachineExampleGame::LoadScene(SceneName scene)
 		break;
 	case SceneName::Gameplay:
 		m_pNextState = new GameplayState(this);
+		system("cls");
 		break;
 	case SceneName::Settings:
 		m_pNextState = new SettingsState(this);

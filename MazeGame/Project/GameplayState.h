@@ -13,7 +13,7 @@ class GameplayState : public GameState
 {
 	StateMachineExampleGame* m_pOwner;
 	
-	Player m_player;
+	Player* m_pPlayer;
 	Level* m_pLevel;
 
 	bool m_beatLevel;

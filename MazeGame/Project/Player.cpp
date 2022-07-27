@@ -3,19 +3,35 @@
 #include "Player.h"
 #include "Key.h"
 #include "AudioManager.h"
+#include "Armor.h"
+#include "Weapon.h"
 
 using namespace std;
 
 constexpr int kStartingNumberOfLives = 3;
 
-Player::Player()
+Player::Player(std::string name, WeaponType weaponType, ArmorClass armorClass)
 	: PlacableActor(0, 0)
+	, m_Name(name)
 	, m_pCurrentKey(nullptr)
 	, m_money(0)
-	, m_lives(kStartingNumberOfLives)
+	, m_health(100)
 	, m_invincibilityCountdown(0)
+	, m_pCurrentWeapon(new Weapon(weaponType))
+	, m_pCurrentArmor(new Armor(armorClass))
 {
+	m_health += m_pCurrentArmor->GetHealthBonus();
+}
 
+Player::~Player() {
+	if (m_pCurrentWeapon != nullptr) {
+		delete m_pCurrentWeapon;
+		m_pCurrentWeapon = nullptr;
+	}
+	if (m_pCurrentArmor != nullptr) {
+		delete m_pCurrentArmor;
+		m_pCurrentArmor = nullptr;
+	}
 }
 
 bool Player::HasKey()
@@ -41,6 +57,18 @@ void Player::PickupKey(Key* key)
 void Player::PickupInvincibililty()
 {
 	m_invincibilityCountdown = 25;
+}
+
+bool Player::IsAlive()
+{
+	return m_health > 0;
+}
+
+void Player::ApplyDamage(int damageAmount) {
+	m_health -= damageAmount;
+	if (m_health < 0) {
+		m_health = 0;
+	}
 }
 
 void Player::UseKey()

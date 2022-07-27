@@ -9,9 +9,9 @@ Enemy::Enemy()
 }
 
 const std::string Enemy::adjectives[] = { "Sweaty", "Hairy", "Smelly", "Snarling", "Drooling" };
-const std::string Enemy::nouns[] = { "Ogre", "Wolf", "Goblin", "Murloc", "Donkey" };
+const std::string Enemy::nouns[] = { "Ogre", "Wolf", "Goblin", "Murloc", "Donkey", "Siren" };
 const int Enemy::adjectivesLength = 5;
-const int Enemy::nounsLength = 5;
+const int Enemy::nounsLength = 6;
 
 std::string Enemy::GetRandomName() {
 	return Enemy::adjectives[rand() % Enemy::adjectivesLength] + " " + Enemy::nouns[rand() % Enemy::nounsLength];

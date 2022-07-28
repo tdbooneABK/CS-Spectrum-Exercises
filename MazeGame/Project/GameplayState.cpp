@@ -6,6 +6,7 @@
 #include <assert.h>
 
 #include "Enemy.h"
+#include "Monster.h"
 #include "Key.h"
 #include "Door.h"
 #include "Money.h"
@@ -15,6 +16,7 @@
 #include "Utility.h"
 #include "StateMachineExampleGame.h"
 #include "PlayerInfoDialog.h"
+#include "Encounter.h"
 
 using namespace std;
 
@@ -33,10 +35,10 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
 {
-	m_LevelNames.push_back("Level2.txt");
 	m_LevelNames.push_back("Level1.txt");
-	m_LevelNames.push_back("Level3.txt");
+	m_LevelNames.push_back("Level2.txt");
 	m_LevelNames.push_back("LevelA.txt");
+	m_LevelNames.push_back("Level3.txt");
 }
 
 GameplayState::~GameplayState()
@@ -173,6 +175,20 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 					AudioManager::GetInstance()->PlayLoseSound();
 					m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
 				}
+			}
+			break;
+		}
+		case ActorType::Monster:
+		{
+			Monster* collidedMonster = dynamic_cast<Monster*>(collidedActor);
+			assert(collidedMonster);
+			if (!Encounter(m_pPlayer, collidedMonster).Run()) {
+				AudioManager::GetInstance()->PlayLoseSound();
+				m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
+			}
+			else {
+				collidedMonster->Remove();
+				m_pPlayer->SetPosition(newPlayerX, newPlayerY);
 			}
 			break;
 		}

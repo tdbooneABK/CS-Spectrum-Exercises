@@ -153,7 +153,9 @@
   <ItemGroup>
     <ClCompile Include="Armor.cpp" />
     <ClCompile Include="AudioManager.cpp" />
+    <ClCompile Include="Combatant.cpp" />
     <ClCompile Include="Door.cpp" />
+    <ClCompile Include="Encounter.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameplayState.cpp" />
@@ -165,6 +167,7 @@
     <ClCompile Include="LoseState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="Money.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="PlacableActor.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerInfoDialog.cpp" />
@@ -177,7 +180,9 @@
   <ItemGroup>
     <ClInclude Include="Armor.h" />
     <ClInclude Include="AudioManager.h" />
+    <ClInclude Include="Combatant.h" />
     <ClInclude Include="Door.h" />
+    <ClInclude Include="Encounter.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameplayState.h" />
@@ -191,6 +196,7 @@
     <ClInclude Include="LoseState.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="Money.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="PlacableActor.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerInfoDialog.h" />

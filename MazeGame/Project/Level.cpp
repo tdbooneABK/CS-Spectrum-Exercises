@@ -5,6 +5,7 @@
 #include "Level.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Monster.h"
 #include "Key.h"
 #include "Door.h"
 #include "Goal.h"
@@ -185,10 +186,12 @@ bool Level::ConvertLevel(int* playerX, int* playerY)
 				m_pLevelData[index] = ' '; // clear the level
 				break;
 			case 'v':
-				m_pLevelData[index] = ' ';
 				m_pActors.push_back(new Enemy(x, y, 0, 2));
 				m_pLevelData[index] = ' '; // clear the level
 				break;
+			case 'M':
+				m_pLevelData[index] = ' ';
+				m_pActors.push_back(new Monster(x, y));
 				break;
 			case ' ':
 				break;

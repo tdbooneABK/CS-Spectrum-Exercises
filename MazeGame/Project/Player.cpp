@@ -12,26 +12,14 @@ constexpr int kStartingNumberOfLives = 3;
 
 Player::Player(std::string name, WeaponType weaponType, ArmorClass armorClass)
 	: PlacableActor(0, 0)
-	, m_Name(name)
+	, Combatant(name, weaponType, armorClass)
 	, m_pCurrentKey(nullptr)
 	, m_money(0)
-	, m_health(100)
 	, m_invincibilityCountdown(0)
-	, m_pCurrentWeapon(new Weapon(weaponType))
-	, m_pCurrentArmor(new Armor(armorClass))
 {
-	m_health += m_pCurrentArmor->GetHealthBonus();
 }
 
 Player::~Player() {
-	if (m_pCurrentWeapon != nullptr) {
-		delete m_pCurrentWeapon;
-		m_pCurrentWeapon = nullptr;
-	}
-	if (m_pCurrentArmor != nullptr) {
-		delete m_pCurrentArmor;
-		m_pCurrentArmor = nullptr;
-	}
 }
 
 bool Player::HasKey()
@@ -62,13 +50,6 @@ void Player::PickupInvincibililty()
 bool Player::IsAlive()
 {
 	return m_health > 0;
-}
-
-void Player::ApplyDamage(int damageAmount) {
-	m_health -= damageAmount;
-	if (m_health < 0) {
-		m_health = 0;
-	}
 }
 
 void Player::UseKey()

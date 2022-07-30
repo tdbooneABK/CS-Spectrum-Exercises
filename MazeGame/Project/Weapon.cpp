@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Weapon.h"
 
 Weapon::Weapon(WeaponType weaponType)
@@ -26,6 +27,10 @@ std::string Weapon::GetWeaponName() {
 	return Weapon::GetWeaponName(m_Type);
 }
 
+std::string Weapon::GetName() {
+	return GetWeaponName();
+}
+
 int Weapon::GetWeaponDamage() {
 	switch (m_Type) {
 		case WeaponType::Sword:
@@ -39,5 +44,21 @@ int Weapon::GetWeaponDamage() {
 			return ((rand() % 100) > 60) * (10 + rand() % 4);
 		default:
 			return 1 + rand() % 4;
+	}
+}
+
+void Weapon::Draw() {
+	switch (m_Type) {
+	case WeaponType::Sword:
+		std::cout << (char)197;
+		break;
+	case WeaponType::Axe:
+		std::cout << (char)203;
+		break;
+	case WeaponType::Bow:
+		std::cout << 'D';
+		break;
+	default:
+		std::cout << ' ';
 	}
 }

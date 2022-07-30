@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include "InventoryItem.h"
 
 enum class WeaponType {
 	Sword=1,
@@ -7,7 +8,7 @@ enum class WeaponType {
 	Bow
 };
 
-class Weapon
+class Weapon : public InventoryItem
 {
 	WeaponType m_Type;
 public:
@@ -17,4 +18,6 @@ public:
 	static std::string GetWeaponName(WeaponType type);
 	std::string GetWeaponName();
 	int GetWeaponDamage();
+	void Draw() override;
+	std::string GetName() override;
 };

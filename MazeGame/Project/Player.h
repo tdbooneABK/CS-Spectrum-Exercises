@@ -2,6 +2,7 @@
 #include <string>
 #include "PlacableActor.h"
 #include "Combatant.h"
+#include "Inventory.h"
 
 class Key;
 class Invincibility;
@@ -12,12 +13,11 @@ public:
 	Player(std::string name, WeaponType weaponType, ArmorClass armorClass);
 	~Player();
 
-	bool HasKey();
 	bool HasKey(ActorColor color);
-	void PickupKey(Key* key);
-	void UseKey();
-	void DropKey();
+	bool PickupKey(Key* key);
+	bool UseKey(ActorColor color);
 	Key* GetKey() { return m_pCurrentKey; }
+	Inventory* GetInventory() { return m_Inventory; }
 
 	bool IsInvincible();
 	void PickupInvincibililty();
@@ -34,4 +34,5 @@ private:
 	Key* m_pCurrentKey;
 	int m_money;
 	int m_invincibilityCountdown;
+	Inventory* m_Inventory;
 };

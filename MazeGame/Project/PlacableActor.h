@@ -21,13 +21,15 @@ enum class ActorType
 	Key,
 	Money,
 	Player,
-	Invincibility
+	Invincibility,
+	InventoryItem
 };
 
 class PlacableActor
 {
 public:
 	PlacableActor(int x, int y, ActorColor color = ActorColor::Regular);
+	PlacableActor();
 	virtual ~PlacableActor();
 
 	int GetXPosition();

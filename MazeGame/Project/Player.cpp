@@ -1,4 +1,5 @@
 #include <iostream>
+#include "assert.h"
 
 #include "Player.h"
 #include "Key.h"
@@ -8,38 +9,61 @@
 
 using namespace std;
 
-constexpr int kStartingNumberOfLives = 3;
-
 Player::Player(std::string name, WeaponType weaponType, ArmorClass armorClass)
 	: PlacableActor(0, 0)
 	, Combatant(name, weaponType, armorClass)
 	, m_pCurrentKey(nullptr)
 	, m_money(0)
 	, m_invincibilityCountdown(0)
+	, m_Inventory(new Inventory())
 {
 }
 
 Player::~Player() {
-}
-
-bool Player::HasKey()
-{
-	return m_pCurrentKey != nullptr;
+	delete m_Inventory;
+	m_Inventory = nullptr;
 }
 
 bool Player::HasKey(ActorColor color)
 {
-	return HasKey() && m_pCurrentKey->GetColor() == color;
+	for (int i = 0; i < Inventory::k_inventorySize; i++) {
+		InventoryItem* item = m_Inventory->GetInventoryItem(i);
+		if (item && item->GetType() == ActorType::Key) {
+			Key* key = dynamic_cast<Key*>(item);
+			assert(key);
+			if (key->GetColor() == color) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool Player::PickupKey(Key* key)
+{
+	return m_Inventory->AddItem(key);
+}
+
+bool Player::UseKey(ActorColor color)
+{
+	for (int i = 0; i < Inventory::k_inventorySize; i++) {
+		InventoryItem* item = m_Inventory->GetInventoryItem(i);
+		if (item && item->GetType() == ActorType::Key) {
+			Key* key = dynamic_cast<Key*>(item);
+			assert(key);
+			if (key->GetColor() == color) {
+				m_Inventory->DropItem(i);
+				delete key;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 
 bool Player::IsInvincible()
 {
 	return m_invincibilityCountdown > 0;
-}
-
-void Player::PickupKey(Key* key)
-{
-	m_pCurrentKey = key;
 }
 
 void Player::PickupInvincibililty()
@@ -50,25 +74,6 @@ void Player::PickupInvincibililty()
 bool Player::IsAlive()
 {
 	return m_health > 0;
-}
-
-void Player::UseKey()
-{
-	if (m_pCurrentKey)
-	{
-		m_pCurrentKey->Remove();
-		m_pCurrentKey = nullptr;
-	}
-}
-
-void Player::DropKey()
-{
-	if (m_pCurrentKey)
-	{
-		AudioManager::GetInstance()->PlayKeyDropSound();
-		m_pCurrentKey->Place(m_pPosition->x, m_pPosition->y);
-		m_pCurrentKey = nullptr;
-	}
 }
 
 void Player::Draw()

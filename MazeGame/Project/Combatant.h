@@ -25,4 +25,3 @@ public:
 
 	Armor* GetArmor() { return m_pCurrentArmor; }
 };
-

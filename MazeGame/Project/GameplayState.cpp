@@ -17,6 +17,7 @@
 #include "StateMachineExampleGame.h"
 #include "PlayerInfoDialog.h"
 #include "Encounter.h"
+#include "InventoryDialog.h"
 
 using namespace std;
 
@@ -35,9 +36,9 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
 {
+	m_LevelNames.push_back("LevelA.txt");
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
-	m_LevelNames.push_back("LevelA.txt");
 	m_LevelNames.push_back("Level3.txt");
 }
 
@@ -109,7 +110,7 @@ bool GameplayState::Update(bool processInput)
 		}
 		else if ((char)input == 'Z' || (char)input == 'z')
 		{
-			m_pPlayer->DropKey();
+			InventoryDialog(m_pPlayer->GetInventory()).Run();
 		}
 
 		m_pPlayer->Update();
@@ -215,13 +216,12 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 		{
 			Key* collidedKey = dynamic_cast<Key*>(collidedActor);
 			assert(collidedKey);
-			if (!m_pPlayer->HasKey())
+			if (m_pPlayer->PickupKey(collidedKey))
 			{
-				m_pPlayer->PickupKey(collidedKey);
-				collidedKey->Remove();
-				m_pPlayer->SetPosition(newPlayerX, newPlayerY);
+				m_pLevel->ExtractActor(collidedKey);
 				AudioManager::GetInstance()->PlayKeyPickupSound();
 			}
+			m_pPlayer->SetPosition(newPlayerX, newPlayerY);
 			break;
 		}
 		case ActorType::Door:
@@ -234,7 +234,7 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 				{
 					collidedDoor->Open();
 					collidedDoor->Remove();
-					m_pPlayer->UseKey();
+					m_pPlayer->UseKey(collidedDoor->GetColor());
 					m_pPlayer->SetPosition(newPlayerX, newPlayerY);
 					AudioManager::GetInstance()->PlayDoorOpenSound();
 				}
@@ -298,8 +298,29 @@ void GameplayState::DrawHUD(const HANDLE& console)
 {
 	cout << endl;
 
+	const int hudWidth = 55;
+
 	// Top Border
-	for (int i = 0; i < m_pLevel->GetWidth(); ++i)
+	for (int i = 0; i < hudWidth; ++i)
+	{
+		cout << Level::WAL;
+	}
+	cout << endl;
+
+	CONSOLE_SCREEN_BUFFER_INFO csbi;
+	GetConsoleScreenBufferInfo(console, &csbi);
+
+	cout << Level::WAL << " " << m_pPlayer->GetName() << " " << Level::WAL << " " << m_pPlayer->GetWeapon()->GetWeaponName() << " " << Level::WAL;
+	cout << " " << m_pPlayer->GetArmor()->GetArmorName() << " " << Level::WAL;
+
+	COORD pos;
+	pos.X = hudWidth - 1;
+	pos.Y = csbi.dwCursorPosition.Y;
+	SetConsoleCursorPosition(console, pos);
+	cout << Level::WAL;
+	cout << endl;
+
+	for (int i = 0; i < hudWidth; ++i)
 	{
 		cout << Level::WAL;
 	}
@@ -308,26 +329,15 @@ void GameplayState::DrawHUD(const HANDLE& console)
 	// Left Side border
 	cout << Level::WAL;
 
-	cout << " wasd-move " << Level::WAL << " z-drop key " << Level::WAL;
+	cout << " wasd-move " << Level::WAL << " z-open inventory " << Level::WAL;
 
 	cout << " $:" << m_pPlayer->GetMoney() << " " << Level::WAL;
-	cout << " health:" << m_pPlayer->GetHealth() << " " << Level::WAL;
-	cout << " key:";
-	if (m_pPlayer->HasKey())
-	{
-		m_pPlayer->GetKey()->Draw();
-	}
-	else
-	{
-		cout << " ";
-	}
+	cout << " health:" << m_pPlayer->GetHealth();
 
 	// RightSide border
-	CONSOLE_SCREEN_BUFFER_INFO csbi;
-	GetConsoleScreenBufferInfo(console, &csbi);
 
-	COORD pos;
-	pos.X = m_pLevel->GetWidth() - 1;
+	GetConsoleScreenBufferInfo(console, &csbi);
+	pos.X = hudWidth - 1;
 	pos.Y = csbi.dwCursorPosition.Y;
 	SetConsoleCursorPosition(console, pos);
 
@@ -335,7 +345,7 @@ void GameplayState::DrawHUD(const HANDLE& console)
 	cout << endl;
 
 	// Bottom Border
-	for (int i = 0; i < m_pLevel->GetWidth(); ++i)
+	for (int i = 0; i < hudWidth; ++i)
 	{
 		cout << Level::WAL;
 	}

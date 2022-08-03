@@ -16,4 +16,5 @@ public:
 	int GetDamage() override;
 	ActorType GetType() override;
 	void Draw() override;
+	void HandlePlayerCollision(Player* player) override;
 };

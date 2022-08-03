@@ -2,6 +2,8 @@
 #include <windows.h>
 
 #include "Key.h"
+#include "Player.h"
+#include "AudioManager.h"
 
 void Key::Draw()
 {
@@ -12,24 +14,11 @@ void Key::Draw()
 	SetConsoleTextAttribute(console, (int)ActorColor::Regular);
 }
 
-std::string Key::GetName()
-{
-	std::string colorName = "";
-	switch (m_color) {
-	case ActorColor::Blue:
-	case ActorColor::SolidBlue:
-		colorName = "Blue";
-		break;
-	case ActorColor::Green:
-	case ActorColor::SolidGreen:
-		colorName = "Green";
-		break;
-	case ActorColor::Red:
-	case ActorColor::SolidRed:
-		colorName = "Red";
-		break;
-	default :
-		colorName = "Rusty";
+void Key::HandlePlayerCollision(Player* player) {
+	if (player->PickupKey(this))
+	{
+		this->Remove();
+		AudioManager::GetInstance()->PlayKeyPickupSound();
 	}
-	return colorName + " Key";
+	player->SetPosition(this->GetXPosition(), this->GetYPosition());
 }

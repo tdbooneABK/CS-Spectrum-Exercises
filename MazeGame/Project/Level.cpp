@@ -230,13 +230,3 @@ PlacableActor* Level::UpdateActors(int x, int y)
 
 	return collidedActor;
 }
-
-// Detaches an actor in the m_pActors array so it can be used after the level is destroyed, e.g., inventory items
-void Level::ExtractActor(PlacableActor* actorToExtract) {
-	for (auto i = m_pActors.begin(); i != m_pActors.end(); i++) {
-		if (*i == actorToExtract) {
-			m_pActors.erase(i);
-			break;
-		}
-	}
-}

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "Monster.h"
+#include "Player.h"
+#include "Encounter.h"
 
 Monster::Monster(int x, int y)
 	: PlacableActor(x, y)
@@ -33,4 +35,11 @@ std::string Monster::GetRandomName() {
 int Monster::GetDamage() {
 	int damage = GetWeapon()->GetWeaponDamage();
 	return damage >= 1 ? damage - 1 : 0;
+}
+
+void Monster::HandlePlayerCollision(Player* player) {
+	if (Encounter(player, this).Run()) {
+		this->Remove();
+		player->SetPosition(this->GetXPosition(), this->GetYPosition());
+	}
 }

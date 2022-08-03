@@ -7,5 +7,6 @@ public:
 
 	virtual ActorType GetType() override { return ActorType::Goal; }
 	virtual void Draw() override;
+	void HandlePlayerCollision(Player* player) override;
 };
 

@@ -5,18 +5,10 @@
 #include <windows.h>
 #include <assert.h>
 
-#include "Enemy.h"
-#include "Monster.h"
-#include "Key.h"
-#include "Door.h"
-#include "Money.h"
-#include "Invincibility.h"
-#include "Goal.h"
 #include "AudioManager.h"
 #include "Utility.h"
 #include "StateMachineExampleGame.h"
 #include "PlayerInfoDialog.h"
-#include "Encounter.h"
 #include "InventoryDialog.h"
 
 using namespace std;
@@ -123,6 +115,17 @@ bool GameplayState::Update(bool processInput)
 		{
 			HandleCollision(newPlayerX, newPlayerY);
 		}
+
+		if (!m_pPlayer->IsAlive())
+		{
+			//TODO: Go to game over screen
+			AudioManager::GetInstance()->PlayLoseSound();
+			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
+		}
+		else if (m_pPlayer->HasReachedExit()) {
+			m_beatLevel = true;
+			m_pPlayer->ResetLevelExitState();
+		}
 	}
 	if (m_beatLevel)
 	{
@@ -158,112 +161,11 @@ void GameplayState::HandleCollision(int newPlayerX, int newPlayerY)
 	PlacableActor* collidedActor = m_pLevel->UpdateActors(newPlayerX, newPlayerY);
 	if (collidedActor != nullptr && collidedActor->IsActive())
 	{
-		switch (collidedActor->GetType())
-		{
-		case ActorType::Enemy:
-		{
-			Enemy* collidedEnemy = dynamic_cast<Enemy*>(collidedActor);
-			assert(collidedEnemy);
-			AudioManager::GetInstance()->PlayLoseLivesSound();
-			collidedEnemy->Remove();
-			m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-
-			if (!m_pPlayer->IsInvincible()) {
-				m_pPlayer->ApplyDamage(40);
-				if (! m_pPlayer->IsAlive())
-				{
-					//TODO: Go to game over screen
-					AudioManager::GetInstance()->PlayLoseSound();
-					m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
-				}
-			}
-			break;
-		}
-		case ActorType::Monster:
-		{
-			Monster* collidedMonster = dynamic_cast<Monster*>(collidedActor);
-			assert(collidedMonster);
-			if (!Encounter(m_pPlayer, collidedMonster).Run()) {
-				AudioManager::GetInstance()->PlayLoseSound();
-				m_pOwner->LoadScene(StateMachineExampleGame::SceneName::Lose);
-			}
-			else {
-				collidedMonster->Remove();
-				m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-			}
-			break;
-		}
-		case ActorType::Money:
-		{
-			Money* collidedMoney = dynamic_cast<Money*>(collidedActor);
-			assert(collidedMoney);
-			AudioManager::GetInstance()->PlayMoneySound();
-			collidedMoney->Remove();
-			m_pPlayer->AddMoney(collidedMoney->GetWorth());
-			m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-			break;
-		}
-		case ActorType::Invincibility:
-		{
-			Invincibility* invincibilityPowerup = dynamic_cast<Invincibility*>(collidedActor);
-			assert(invincibilityPowerup);
-			invincibilityPowerup->Remove();
-			m_pPlayer->PickupInvincibililty();
-			m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-			break;
-		}
-		case ActorType::Key:
-		{
-			Key* collidedKey = dynamic_cast<Key*>(collidedActor);
-			assert(collidedKey);
-			if (m_pPlayer->PickupKey(collidedKey))
-			{
-				m_pLevel->ExtractActor(collidedKey);
-				AudioManager::GetInstance()->PlayKeyPickupSound();
-			}
-			m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-			break;
-		}
-		case ActorType::Door:
-		{
-			Door* collidedDoor = dynamic_cast<Door*>(collidedActor);
-			assert(collidedDoor);
-			if (!collidedDoor->IsOpen())
-			{
-				if (m_pPlayer->HasKey(collidedDoor->GetColor()))
-				{
-					collidedDoor->Open();
-					collidedDoor->Remove();
-					m_pPlayer->UseKey(collidedDoor->GetColor());
-					m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-					AudioManager::GetInstance()->PlayDoorOpenSound();
-				}
-				else
-				{
-					AudioManager::GetInstance()->PlayDoorClosedSound();
-				}
-			}
-			else
-			{
-				m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-			}
-			break;
-		}
-		case ActorType::Goal:
-		{
-			Goal* collidedGoal = dynamic_cast<Goal*>(collidedActor);
-			assert(collidedGoal);
-			collidedGoal->Remove();
-			m_pPlayer->SetPosition(newPlayerX, newPlayerY);
-			m_beatLevel = true;
-			break;
-		}
-		default:
-			break;
-		}
+		collidedActor->HandlePlayerCollision(m_pPlayer);
 	}
-	else if (m_pLevel->IsSpace(newPlayerX, newPlayerY)) // no collision
+	else if (m_pLevel->IsSpace(newPlayerX, newPlayerY))
 	{
+		// no collision
 		m_pPlayer->SetPosition(newPlayerX, newPlayerY);
 	}
 	else if (m_pLevel->IsWall(newPlayerX, newPlayerY))

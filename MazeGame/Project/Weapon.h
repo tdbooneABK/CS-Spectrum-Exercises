@@ -18,6 +18,6 @@ public:
 	static std::string GetWeaponName(WeaponType type);
 	std::string GetWeaponName();
 	int GetWeaponDamage();
-	void Draw() override;
 	std::string GetName() override;
+	ItemType GetType() override { return ItemType::Weapon; }
 };

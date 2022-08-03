@@ -10,6 +10,7 @@ public:
 	virtual ActorType GetType() override { return ActorType::Door;  }
 	bool IsOpen() { return m_isOpen;  }
 	void Open() { m_isOpen = true; }
+	void HandlePlayerCollision(Player* player);
 
 private:
 	bool m_isOpen;

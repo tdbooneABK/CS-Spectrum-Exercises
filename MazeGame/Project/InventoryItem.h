@@ -1,15 +1,23 @@
 #pragma once
 #include <string>
-#include "PlacableActor.h"
 
-class InventoryItem : public PlacableActor
+enum class ItemType {
+	Key,
+	Weapon
+};
+
+class InventoryItem
 {
 public:
-	InventoryItem(int x, int y, ActorColor color);
-	InventoryItem();
-	virtual ~InventoryItem();
+	InventoryItem()
+	{
 
-	virtual ActorType GetType() { return ActorType::InventoryItem; };
-	virtual void Draw() = 0;
+	}
+	virtual ~InventoryItem()
+	{
+
+	}
+
 	virtual std::string GetName() = 0;
+	virtual ItemType GetType() = 0;
 };

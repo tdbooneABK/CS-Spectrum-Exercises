@@ -1,5 +1,7 @@
 #include "Enemy.h"
 #include <iostream>
+#include "AudioManager.h"
+#include "Player.h"
 
 Enemy::Enemy(int x, int y, int deltaX, int deltaY)
 	: PlacableActor(x, y)
@@ -54,3 +56,13 @@ void Enemy::UpdateDirection(int& current, int& direction, int& movement)
 	}
 }
 
+void Enemy::HandlePlayerCollision(Player* player) {
+	AudioManager::GetInstance()->PlayLoseLivesSound();
+	this->Remove();
+	player->SetPosition(this->GetXPosition(), this->GetYPosition());
+
+	if (!player->IsInvincible()) {
+		player->ApplyDamage(40);
+		// Logic to go to game over screen moved to GameplateState::Update after calling HandleCollision
+	}
+}

@@ -8,4 +8,5 @@ public:
     Invincibility(int x, int y);
     ActorType GetType();
     void Draw();
+    void HandlePlayerCollision(Player* player) override;
 };

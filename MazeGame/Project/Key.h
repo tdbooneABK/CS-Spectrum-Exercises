@@ -1,17 +1,17 @@
 #pragma once
-#include "InventoryItem.h"
+#include "PlacableActor.h"
 
-class Key : public InventoryItem
+class Key : public PlacableActor
 {
 public:
 	Key(int x, int y, ActorColor color)
-		: InventoryItem(x, y, color)
+		: PlacableActor(x, y, color)
 	{
 
 	}
 
 	virtual ActorType GetType() override { return ActorType::Key; }
 	virtual void Draw() override;
-	virtual std::string GetName() override;
+	void HandlePlayerCollision(Player* player) override;
 };
 

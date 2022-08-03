@@ -46,19 +46,3 @@ int Weapon::GetWeaponDamage() {
 			return 1 + rand() % 4;
 	}
 }
-
-void Weapon::Draw() {
-	switch (m_Type) {
-	case WeaponType::Sword:
-		std::cout << (char)197;
-		break;
-	case WeaponType::Axe:
-		std::cout << (char)203;
-		break;
-	case WeaponType::Bow:
-		std::cout << 'D';
-		break;
-	default:
-		std::cout << ' ';
-	}
-}

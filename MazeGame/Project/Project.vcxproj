@@ -163,9 +163,9 @@
     <ClCompile Include="HighScoreState.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="InventoryDialog.cpp" />
-    <ClCompile Include="InventoryItem.cpp" />
     <ClCompile Include="Invincibility.cpp" />
     <ClCompile Include="Key.cpp" />
+    <ClCompile Include="KeyItem.cpp" />
     <ClCompile Include="Level.cpp" />
     <ClCompile Include="LoseState.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
@@ -198,6 +198,7 @@
     <ClInclude Include="InventoryItem.h" />
     <ClInclude Include="Invincibility.h" />
     <ClInclude Include="Key.h" />
+    <ClInclude Include="KeyItem.h" />
     <ClInclude Include="Level.h" />
     <ClInclude Include="LoseState.h" />
     <ClInclude Include="MainMenuState.h" />

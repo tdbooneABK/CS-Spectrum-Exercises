@@ -3,6 +3,7 @@
 
 #include "Player.h"
 #include "Key.h"
+#include "KeyItem.h"
 #include "AudioManager.h"
 #include "Armor.h"
 #include "Weapon.h"
@@ -16,6 +17,7 @@ Player::Player(std::string name, WeaponType weaponType, ArmorClass armorClass)
 	, m_money(0)
 	, m_invincibilityCountdown(0)
 	, m_Inventory(new Inventory())
+	, m_hasReachedExit(false)
 {
 }
 
@@ -28,8 +30,8 @@ bool Player::HasKey(ActorColor color)
 {
 	for (int i = 0; i < Inventory::k_inventorySize; i++) {
 		InventoryItem* item = m_Inventory->GetInventoryItem(i);
-		if (item && item->GetType() == ActorType::Key) {
-			Key* key = dynamic_cast<Key*>(item);
+		if (item && item->GetType() == ItemType::Key) {
+			KeyItem* key = dynamic_cast<KeyItem*>(item);
 			assert(key);
 			if (key->GetColor() == color) {
 				return true;
@@ -41,15 +43,21 @@ bool Player::HasKey(ActorColor color)
 
 bool Player::PickupKey(Key* key)
 {
-	return m_Inventory->AddItem(key);
+	KeyItem* keyItem = new KeyItem(key->GetColor());
+	bool canPickupKey = m_Inventory->AddItem(keyItem);
+	if (! canPickupKey) {
+		delete keyItem;
+		keyItem = nullptr;
+	}
+	return canPickupKey;
 }
 
 bool Player::UseKey(ActorColor color)
 {
 	for (int i = 0; i < Inventory::k_inventorySize; i++) {
 		InventoryItem* item = m_Inventory->GetInventoryItem(i);
-		if (item && item->GetType() == ActorType::Key) {
-			Key* key = dynamic_cast<Key*>(item);
+		if (item && item->GetType() == ItemType::Key) {
+			KeyItem* key = dynamic_cast<KeyItem*>(item);
 			assert(key);
 			if (key->GetColor() == color) {
 				m_Inventory->DropItem(i);

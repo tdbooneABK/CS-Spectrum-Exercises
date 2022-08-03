@@ -24,8 +24,8 @@ void CityGraph::AddTwoWayConnection(std::string city1, std::string city2, float 
 }
 
 float estDistanceBetweenCities(City* city1, City* city2) {
-	return sqrtf(powf(abs(city1->GetLat() - city2->GetLat()), 2.0f)
-		+ powf(abs(city1->GetLong() - city2->GetLong()), 2.0f)) * 52.5f;
+    return (sqrtf(powf(abs(city1->GetLat() - city2->GetLat()), 2.0f)
+		+ powf(abs(city1->GetLong() - city2->GetLong()), 2.0f))) * 52.5f;
 }
 
 void CityGraph::GetPathBetweenCities(std::string city1, std::string city2) {
@@ -79,6 +79,7 @@ void CityGraph::GetPathBetweenCities(std::string city1, std::string city2) {
         Node* GetHead() { return head; }
         int GetSize() { return size; }
         void AddNode(PathSoFar value) {
+            // If the list is empty, then the new node is the new head
             if ((head == nullptr) || (value.distanceWithHeuristicValue < head->value.distanceWithHeuristicValue)) {
                 head = new Node(value, head);
                 size++;
@@ -87,22 +88,24 @@ void CityGraph::GetPathBetweenCities(std::string city1, std::string city2) {
                 Node* currentNode = head;
                 bool insertedNew = false;
                 while (currentNode != nullptr) {
+                    // If a node with a lower score for the same destination already exists, then don't add it again
                     if (currentNode->value.thisCity == value.thisCity && currentNode->value.distanceWithHeuristicValue <= value.distanceWithHeuristicValue) {
-                        // If a node with a lower score for the same destination already exists, then skip this one
                         break;
                     }
+                    // If we reach the end of the list and haven't found a higher node, then add this node to the very end
                     else if (!insertedNew && currentNode->next == nullptr) {
                         currentNode->next = new Node(value);
                         size++;
                         break;
                     }
+                    // Insert the new node just before the net highest node on the list
                     else if (!insertedNew && currentNode->next->value.distanceWithHeuristicValue >= value.distanceWithHeuristicValue) {
                         Node* temp = currentNode->next;
                         currentNode->next = new Node(value, temp);
                         currentNode = currentNode->next;
                     }
-                    else if (insertedNew && currentNode->next->value.thisCity == value.thisCity) {
-                        // The linked list should yank out any matching nodes with a HIGHER score after finding one with a lower score.
+                    // The linked list should yank out any matching nodes with a HIGHER score after finding one with a lower score.
+                    else if (insertedNew && currentNode->next->value.thisCity == value.thisCity) {                        
                         Node* nodeToDelete = currentNode->next;
                         currentNode->next = currentNode->next->next;
                         delete nodeToDelete;
@@ -138,36 +141,37 @@ void CityGraph::GetPathBetweenCities(std::string city1, std::string city2) {
         // Look through all connected nodes
         std::vector<Link*> linksFromTopNode = topNode.thisCity->GetLinks();
         for (std::vector<Link*>::iterator it = linksFromTopNode.begin(); it < linksFromTopNode.end(); it++) {
-            City* destination = (*it)->GetDestination();
+            City* nodeToCheck = (*it)->GetDestination();
             // If it's the goal, then print out the winning path and distance, then return.
-            std::map<std::string, PathSoFar>::iterator cityInClosed = closedList.find(destination->GetName());
-            // TODO: see if this works by comparing the pointers instead of the names
-            if (destination->GetName() == city2) {
+            std::map<std::string, PathSoFar>::iterator cityInClosed = closedList.find(nodeToCheck->GetName());
+            // TODO: see if this works by comparing the pointers instead of the names?
+            if (nodeToCheck->GetName() == city2) {
                 std::cout << "Destination found!" << std::endl;
                 closedList.insert({
                     city2,
                     PathSoFar(
                         topNode.distanceSoFar + (*it)->GetDistance(),
-                        topNode.distanceSoFar + (*it)->GetDistance() + estDistanceBetweenCities(destination, endCity),
-                        destination,
+                        topNode.distanceSoFar + (*it)->GetDistance() + estDistanceBetweenCities(nodeToCheck, endCity),
+                        nodeToCheck,
                         topNode.thisCity
                     )
                     });
                 destinationFound = true;
                 break;
             }
-            // If it's on the closed list, then skip it
+            // If it's not on the closed list, then add it to the open list
             else if (cityInClosed == closedList.end()) {
                 //std::cout << "Evaluating step to " << destination->GetName() << std::endl;
                 openList.AddNode(PathSoFar(
                     topNode.distanceSoFar + (*it)->GetDistance(),
-                    topNode.distanceSoFar + (*it)->GetDistance() + estDistanceBetweenCities(destination, endCity),
-                    destination,
+                    topNode.distanceSoFar + (*it)->GetDistance() + estDistanceBetweenCities(nodeToCheck, endCity),
+                    nodeToCheck,
                     topNode.thisCity
                 ));
             }
         }
 
+        // Add the node we just checked through to the closed list
         closedList.insert({ topNode.thisCity->GetName(), PathSoFar(topNode) });
         if (destinationFound) {
             break;
@@ -178,6 +182,7 @@ void CityGraph::GetPathBetweenCities(std::string city1, std::string city2) {
         std::map<std::string, PathSoFar>::iterator currentJourneyStep = closedList.find(city2);
         std::cout << "Final Distance: " << currentJourneyStep->second.distanceSoFar << "mi" << std::endl;
         std::vector<std::string> pathFromDestination;
+        // Reconstruct the path to the destination by going backwards
         while (currentJourneyStep != closedList.end()) {
             pathFromDestination.push_back(currentJourneyStep->second.thisCity->GetName());
             if (currentJourneyStep->second.prevCity) {
@@ -188,6 +193,7 @@ void CityGraph::GetPathBetweenCities(std::string city1, std::string city2) {
             }
         }
         std::cout << "Path to destination: " << std::endl;
+        // Iterate through pathFromDestination backwards to print out the path from start to finish
         for (std::vector<std::string>::reverse_iterator i = pathFromDestination.rbegin(); i < pathFromDestination.rend(); i++) {
             std::cout << *i << std::endl;
         }

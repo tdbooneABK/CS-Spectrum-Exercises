@@ -11,6 +11,7 @@ Enemy::Enemy(int x, int y, int deltaX, int deltaY)
 	, m_directionY(0)
 	, m_movementInX(deltaX)
 	, m_movementInY(deltaY)
+	, m_framesUntilMove(Enemy::framesPerMove)
 {
 	InitDirection();
 }
@@ -34,16 +35,23 @@ void Enemy::Draw()
 
 void Enemy::Update()
 {
-	if (m_movementInX != 0)
-	{
-		UpdateDirection(m_currentMovementX, m_directionX, m_movementInX);
-	}
-	if (m_movementInY != 0)
-	{
-		UpdateDirection(m_currentMovementY, m_directionY, m_movementInY);
-	}
+	if (m_framesUntilMove == 0) {
+		if (m_movementInX != 0)
+		{
+			UpdateDirection(m_currentMovementX, m_directionX, m_movementInX);
+		}
+		if (m_movementInY != 0)
+		{
+			UpdateDirection(m_currentMovementY, m_directionY, m_movementInY);
+		}
 
-	this->SetPosition(m_pPosition->x + m_directionX, m_pPosition->y + m_directionY);
+		this->SetPosition(m_pPosition->x + m_directionX, m_pPosition->y + m_directionY);
+
+		m_framesUntilMove = Enemy::framesPerMove;
+	}
+	else {
+		m_framesUntilMove--;
+	}
 }
 
 void Enemy::UpdateDirection(int& current, int& direction, int& movement)

@@ -11,6 +11,8 @@ public:
 	virtual void Update() override;
 	virtual void HandlePlayerCollision(Player* player) override;
 
+	static const int framesPerMove = 2;
+
 protected:
 	void InitDirection();
 
@@ -23,6 +25,8 @@ private:
 
 	int m_directionX;
 	int m_directionY;
+
+	int m_framesUntilMove;
 
 	void UpdateDirection(int& current, int& direction, int& movement);
 

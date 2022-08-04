@@ -161,6 +161,7 @@
     <ClCompile Include="GameplayState.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="HighScoreState.cpp" />
+    <ClCompile Include="InputProcessor.cpp" />
     <ClCompile Include="Inventory.cpp" />
     <ClCompile Include="InventoryDialog.cpp" />
     <ClCompile Include="Invincibility.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="GameStateMachine.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="HighScoreState.h" />
+    <ClInclude Include="InputProcessor.h" />
     <ClInclude Include="Inventory.h" />
     <ClInclude Include="InventoryDialog.h" />
     <ClInclude Include="InventoryItem.h" />

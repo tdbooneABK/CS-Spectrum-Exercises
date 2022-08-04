@@ -76,7 +76,7 @@ bool Player::IsInvincible()
 
 void Player::PickupInvincibililty()
 {
-	m_invincibilityCountdown = 25;
+	m_invincibilityCountdown = 60;
 }
 
 bool Player::IsAlive()
@@ -87,7 +87,7 @@ bool Player::IsAlive()
 void Player::Draw()
 {
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (m_invincibilityCountdown > 10) {
+	if (m_invincibilityCountdown > 20) {
 		SetConsoleTextAttribute(console, (int)ActorColor::Green);
 	}
 	// When less than 10 frames are left, alternate between red and green

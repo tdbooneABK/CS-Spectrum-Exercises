@@ -23,10 +23,6 @@ public:
 	~InputProcessor();
 	void Run();
 	void Stop();
-	// TODO: Figure out how to do this, so we're not moving
-	// when the inventory menu is open? Is that a concern?
-	//void Pause();
-	//void Resume();
 	InputEvent GetInput();
 private:
 	void ListenForKeyPress();

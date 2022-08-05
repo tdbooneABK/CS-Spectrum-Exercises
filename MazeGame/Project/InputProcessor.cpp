@@ -9,6 +9,10 @@ constexpr int kUpArrow = 72;
 constexpr int kDownArrow = 80;
 constexpr int kEscapeKey = 27;
 
+/*
+	TODO: Make this a singleton, and update it so that all screens and states can use this.
+*/
+
 InputProcessor::InputProcessor()
 	: m_CapturedEvent(InputEvent::None)
 	, m_InputThread(nullptr)

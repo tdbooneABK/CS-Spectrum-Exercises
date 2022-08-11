@@ -5,6 +5,7 @@
 #include <windows.h>
 #include <vector>
 #include <string>
+#include <atomic>
 
 namespace std
 {
@@ -28,6 +29,9 @@ class GameplayState : public GameState
 	int m_currentLevel;
 
 	std::vector<std::string> m_LevelNames;
+
+	std::atomic<int> m_pendingXMovement;
+	std::atomic<int> m_pendingYMovement;
 
 public:
 	GameplayState(StateMachineExampleGame* pOwner);

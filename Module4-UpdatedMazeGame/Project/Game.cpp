@@ -28,8 +28,6 @@ void Game::RunGameLoop()
 		// Update with input
 		isGameOver = Update();
 	}
-
-	Draw();
 }
 
 void Game::Deinitialize()

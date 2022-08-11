@@ -33,6 +33,8 @@ GameplayState::GameplayState(StateMachineExampleGame* pOwner)
 	, m_skipFrameCount(0)
 	, m_currentLevel(0)
 	, m_pLevel(nullptr)
+	, m_pendingXMovement(0)
+	, m_pendingYMovement(0)
 {
 	m_LevelNames.push_back("Level1.txt");
 	m_LevelNames.push_back("Level2.txt");
@@ -45,6 +47,10 @@ GameplayState::~GameplayState()
 {
 	delete m_pLevel;
 	m_pLevel = nullptr;
+
+	m_inputThread->join();
+	delete m_inputThread;
+	m_inputThread = nullptr;
 }
 
 bool GameplayState::Load()
@@ -73,8 +79,6 @@ void GameplayState::ProcessInput()
 	{
 		int input = _getch();
 		int arrowInput = 0;
-		int newPlayerX = m_player.GetXPosition();
-		int newPlayerY = m_player.GetYPosition();
 
 		// One of the arrow keys were pressed
 		if (input == kArrowInput)
@@ -85,38 +89,32 @@ void GameplayState::ProcessInput()
 		if ((input == kArrowInput && arrowInput == kLeftArrow) ||
 			(char)input == 'A' || (char)input == 'a')
 		{
-			newPlayerX--;
+			m_pendingXMovement = -1;
 		}
 		else if ((input == kArrowInput && arrowInput == kRightArrow) ||
 			(char)input == 'D' || (char)input == 'd')
 		{
-			newPlayerX++;
+			m_pendingXMovement = 1;
 		}
 		else if ((input == kArrowInput && arrowInput == kUpArrow) ||
 			(char)input == 'W' || (char)input == 'w')
 		{
-			newPlayerY--;
+			m_pendingYMovement = -1;
 		}
 		else if ((input == kArrowInput && arrowInput == kDownArrow) ||
 			(char)input == 'S' || (char)input == 's')
 		{
-			newPlayerY++;
+			m_pendingYMovement = 1;
 		}
 		else if (input == kEscapeKey)
 		{
+			m_shouldProcessInput = false;
 			m_pOwner->LoadScene(StateMachineExampleGame::SceneName::MainMenu);
 		}
 		else if ((char)input == 'Z' || (char)input == 'z')
 		{
 			m_player.DropKey();
 		}
-
-		// If position never changed
-		if (newPlayerX != m_player.GetXPosition() || newPlayerY != m_player.GetYPosition())
-		{
-			HandleCollision(newPlayerX, newPlayerY);
-		}
-		this_thread::sleep_for(chrono::milliseconds(SleepTime));
 	}
 }
 
@@ -150,9 +148,15 @@ void GameplayState::CheckBeatLevel()
 //TODO: Refactor
 bool GameplayState::Update(bool processInput)
 {
-	m_pLevel->UpdateActors();
-	HandleCollision(m_player.GetXPosition(), m_player.GetYPosition());
-	CheckBeatLevel();
+	if (processInput) {
+		int xDiff = m_pendingXMovement;
+		int yDiff = m_pendingYMovement;
+		m_pendingXMovement = 0;
+		m_pendingYMovement = 0;
+		m_pLevel->UpdateActors();
+		HandleCollision(m_player.GetXPosition() + xDiff, m_player.GetYPosition() + yDiff);
+		CheckBeatLevel();
+	}
 	return false;
 }
 
